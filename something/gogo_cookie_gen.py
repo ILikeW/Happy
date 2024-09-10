@@ -30,4 +30,4 @@ def get_gogo_cookie(email, password):
 
 
 with open("gogoCookie.txt", "w") as f:
-    f.write(get_gogo_cookie("careel995@magim.be", "P@8eqB7@YpJz5ea"))
+    f.write(get_gogo_cookie("qwertytechz123@gmail.com", "P@8eqB7@YpJz5ea"))
