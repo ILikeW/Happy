@@ -2,7 +2,7 @@ name: gogo_cookie_gen
 
 on:
   schedule:
-    - cron: '0 0 * * *' # runs every 10 min
+    - cron: '0 0 * * *' # runs every day at midnight
 
   workflow_dispatch:
 
@@ -37,5 +37,5 @@ jobs:
       - name: push changes
         uses: ad-m/github-push-action@v0.6.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main  
+          github_token: ${{ secrets.PAT }}
+          branch: main
