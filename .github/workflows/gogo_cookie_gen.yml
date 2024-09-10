@@ -12,12 +12,12 @@ jobs:
     steps:
 
       - name: checkout repo content
-        uses: actions/checkout@v2 # checkout the repository content to github runner
+        uses: actions/checkout@v2
 
       - name: setup python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.10' # install the python version needed
+          python-version: '3.10'
           
       - name: install python packages
         run: |
@@ -25,23 +25,28 @@ jobs:
           pip install requests bs4
           
       - name: execute py script
+        env:
+          GOGO_EMAIL: ${{ secrets.GOGO_EMAIL }}
+          GOGO_PASSWORD: ${{ secrets.GOGO_PASSWORD }}
         run: python something/gogo_cookie_gen.py
           
-      - name: check for changes
-        id: git-check
+      - name: check for file changes
+        id: file-check
         run: |
-          git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
+          if [[ -f gogoCookie.txt ]]; then
+            echo "file_exists=true" >> $GITHUB_OUTPUT
+          fi
 
       - name: commit files
-        if: steps.git-check.outputs.changes == 'true'
+        if: steps.file-check.outputs.file_exists == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add -A
-          git commit -m "update data" -a
+          git add gogoCookie.txt
+          git commit -m "Update gogoCookie.txt" -a
           
       - name: push changes
-        if: steps.git-check.outputs.changes == 'true'
+        if: steps.file-check.outputs.file_exists == 'true'
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.PAT }}
