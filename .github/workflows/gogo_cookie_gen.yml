@@ -2,7 +2,7 @@ name: gogo_cookie_gen
 
 on:
   schedule:
-    - cron: '0 0 * * *' # runs every day at midnight
+    - cron: '*/10 * * * *'  # runs every 10 minutes
 
   workflow_dispatch:
 
