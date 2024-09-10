@@ -27,7 +27,13 @@ jobs:
       - name: execute py script
         run: python something/gogo_cookie_gen.py
           
+      - name: check for changes
+        id: git-check
+        run: |
+          git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
+
       - name: commit files
+        if: steps.git-check.outputs.changes == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
@@ -35,6 +41,7 @@ jobs:
           git commit -m "update data" -a
           
       - name: push changes
+        if: steps.git-check.outputs.changes == 'true'
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.PAT }}
